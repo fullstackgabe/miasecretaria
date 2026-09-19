@@ -8,9 +8,9 @@ const auth = useAuthStore()
 
 const PRESENTATION =
   'Olá, eu sou a Mia 👋\n\n' +
-  'Ainda não sou a sua secretária... mas adoraria ser! 😄\n\n' +
-  'Marco seus compromissos por texto ou áudio e te lembro no WhatsApp na hora certa.\n\n' +
-  'Pra me ter de vez, é só falar com a gente e ativar o seu acesso. É baratinho e super vale a pena! 👇'
+  'Ainda não sou a sua secretária virtual... mas adoraria ser! 😄\n\n' +
+  'Te aviso no WhatsApp na hora certinho: é só me informar o nome do evento, quando e que horas.\n\n' +
+  'Pra me ter de vez, é só ativar o seu acesso. É baratinho e super vale a pena! 👇'
 
 const FAREWELL = 'Te vejo em breve! 😊'
 </script>
