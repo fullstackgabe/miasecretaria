@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 import type { ChatItem, MessageMeta, ParsedAppointment } from '@/types'
-import { askSecretaria, loadHistory, saveMessage, clearConversation, type AskInput } from '@/lib/agent'
+import { askMia, loadHistory, saveMessage, clearConversation, type AskInput } from '@/lib/agent'
 import { addAppointment, PastError } from '@/lib/repo'
 import { useProfileStore } from '@/stores/profile'
 import { deviceTz } from '@/lib/dates'
@@ -99,7 +99,7 @@ export const useChatStore = defineStore('chat', () => {
     typing.value = true
     saveMessage('user', userText, userMeta).catch(() => {})
     try {
-      const { reply, meta } = await askSecretaria(payload)
+      const { reply, meta } = await askMia(payload)
       await revealBot({ id: uid(), role: 'assistant', content: reply, meta })
       if (meta?.type !== 'pending') saveMessage('assistant', reply, meta).catch(() => {})
     } catch {

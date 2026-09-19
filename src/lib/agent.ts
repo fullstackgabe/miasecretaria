@@ -12,7 +12,7 @@ export type AskInput = {
 
 const NEEDS_SERVER = 'Pra entender áudio eu preciso de conexão com o servidor. Por enquanto, me conta o compromisso por texto. 🙂'
 
-export async function askSecretaria(input: AskInput): Promise<{ reply: string; meta: MessageMeta }> {
+export async function askMia(input: AskInput): Promise<{ reply: string; meta: MessageMeta }> {
   const { text, audioBase64, audioMime } = input
   if (!isDemo) {
     const { data, error } = await supabase.functions.invoke('agent', {
