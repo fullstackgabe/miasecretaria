@@ -7,7 +7,6 @@ import { toast } from '@/composables/useToast'
 import type { AppointmentPatch } from '@/lib/repo'
 import MonthCalendar from '@/components/agenda/MonthCalendar.vue'
 import AppointmentRowItem from '@/components/agenda/AppointmentRow.vue'
-import DetailSheet from '@/components/agenda/DetailSheet.vue'
 import EditSheet from '@/components/agenda/EditSheet.vue'
 import DeleteSheet from '@/components/agenda/DeleteSheet.vue'
 import Spinner from '@/components/Spinner.vue'
@@ -17,7 +16,6 @@ const tz = computed(() => agenda.tz())
 const today = computed(() => todayLocal(tz.value))
 const label = computed(() => (agenda.selected ? dayLabelForDate(agenda.selected, tz.value) : ''))
 
-const openRow = ref<AppointmentRow | null>(null)
 const editRow = ref<AppointmentRow | null>(null)
 const deleteRow = ref<AppointmentRow | null>(null)
 const busy = ref(false)
@@ -48,7 +46,6 @@ async function save(patch: AppointmentPatch) {
   try {
     await agenda.update(editRow.value, patch)
     editRow.value = null
-    openRow.value = null
     toast('Compromisso atualizado.')
   } catch {
     toast('Não consegui salvar. Tenta de novo?')
@@ -59,14 +56,14 @@ async function save(patch: AppointmentPatch) {
 
 async function confirmDelete() {
   if (!deleteRow.value) return
+  const past = isPast(deleteRow.value)
   busy.value = true
   try {
     await agenda.remove(deleteRow.value.id)
     deleteRow.value = null
-    openRow.value = null
-    toast('Compromisso desmarcado.')
+    toast(past ? 'Compromisso apagado.' : 'Compromisso desmarcado.')
   } catch {
-    toast('Não consegui desmarcar. Tenta de novo?')
+    toast(past ? 'Não consegui apagar. Tenta de novo?' : 'Não consegui desmarcar. Tenta de novo?')
   } finally {
     busy.value = false
   }
@@ -75,7 +72,6 @@ async function confirmDelete() {
 async function retry(id: string) {
   try {
     await agenda.retry(id)
-    openRow.value = null
     toast('Vou tentar mandar o aviso de novo em instantes.')
   } catch {
     toast('Não consegui reagendar o aviso.')
@@ -113,7 +109,7 @@ async function retry(id: string) {
           :row="r"
           :tz="tz"
           :past="isPast(r)"
-          @open="openRow = $event"
+          @edit="editRow = $event"
           @remove="deleteRow = $event"
           @retry="retry"
         />
@@ -123,17 +119,8 @@ async function retry(id: string) {
         Me conta no chat que eu marco. 💬
       </p>
 
-      <DetailSheet
-        v-if="openRow && !editRow && !deleteRow"
-        :row="openRow"
-        :tz="tz"
-        @close="openRow = null"
-        @edit="editRow = openRow"
-        @remove="deleteRow = openRow"
-        @retry="retry"
-      />
       <EditSheet v-if="editRow" :row="editRow" :tz="tz" :busy="busy" @close="editRow = null" @save="save" />
-      <DeleteSheet v-if="deleteRow" :row="deleteRow" :tz="tz" :busy="busy" @close="deleteRow = null" @confirm="confirmDelete" />
+      <DeleteSheet v-if="deleteRow" :row="deleteRow" :tz="tz" :busy="busy" :past="isPast(deleteRow)" @close="deleteRow = null" @confirm="confirmDelete" />
     </template>
   </div>
 </template>

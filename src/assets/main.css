@@ -4,12 +4,14 @@
   --color-primary: #1d4ed8;
   --color-primary-soft: #dbeafe;
   --color-primary-border: #bfdbfe;
+  --color-primary-light: #93c5fd;
   --color-accent: #bfdbfe;
   --color-success: #16a34a;
   --color-success-soft: #dcfce7;
   --color-danger: #dc2626;
   --color-danger-soft: #fef2f2;
   --color-danger-border: #fecaca;
+  --color-danger-light: #fca5a5;
   --color-danger-fill: #fee2e2;
   --color-warn-soft: #fffbeb;
   --color-warn-border: #fde68a;
