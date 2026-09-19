@@ -2,7 +2,6 @@
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ArrowLeft, RefreshCw, Settings } from '@lucide/vue'
-import Brand from '@/components/Brand.vue'
 import { useAgendaStore } from '@/stores/agenda'
 
 const route = useRoute()
@@ -25,10 +24,7 @@ const title = computed(() => String(route.meta.title ?? ''))
       >
         <ArrowLeft :size="24" />
       </button>
-      <h1 class="text-[17px] font-extrabold">
-        <Brand v-if="route.meta.brand" />
-        <template v-else>{{ title }}</template>
-      </h1>
+      <h1 class="text-[17px] font-extrabold">{{ title }}</h1>
       <div v-if="!isProfile" class="absolute right-2 top-1/2 flex -translate-y-1/2 items-center">
         <button
           v-if="isAgenda"

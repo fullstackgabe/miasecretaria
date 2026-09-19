@@ -10,7 +10,7 @@ export const router = createRouter({
   history: createWebHistory(),
   routes: [
     { path: '/', redirect: '/chat' },
-    { path: '/chat', name: 'chat', component: ChatView, meta: { title: 'Mia', brand: true } },
+    { path: '/chat', name: 'chat', component: ChatView, meta: { title: 'Home' } },
     { path: '/agenda', name: 'agenda', component: AgendaView, meta: { title: 'Agenda' } },
     { path: '/perfil', name: 'perfil', component: ProfileView, meta: { title: 'Perfil' } },
     { path: '/conectar', name: 'conectar', component: ConnectView, meta: { title: 'Conectar' } },
