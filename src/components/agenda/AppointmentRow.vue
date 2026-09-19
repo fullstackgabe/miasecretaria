@@ -16,12 +16,12 @@ const reminder = computed(() => latestReminder(props.row))
   <div class="flex items-center gap-3 border-b border-line px-3 py-3 last:border-b-0" :class="past ? 'opacity-70' : ''">
     <div class="w-[52px] shrink-0 text-[16px] font-extrabold text-ink">{{ timeHM(row.starts_at, tz) }}</div>
     <div class="min-w-0 flex-1">
-      <p class="truncate text-[15.5px] font-semibold text-ink">{{ row.title }}</p>
-      <p v-if="row.location" class="mt-0.5 flex items-center gap-1 truncate text-[13px] text-muted">
+      <p class="truncate text-[15.5px] font-semibold leading-tight text-ink">{{ row.title }}</p>
+      <p v-if="row.location" class="mt-0.5 flex items-center gap-1 truncate text-[13px] leading-tight text-muted">
         <MapPin :size="13" class="shrink-0" />
         {{ row.location }}
       </p>
-      <div class="mt-1">
+      <div class="mt-0.5 flex leading-tight">
         <ReminderBadge :reminder="reminder" :tz="tz" @retry="(id) => emit('retry', id)" />
       </div>
     </div>

@@ -16,11 +16,13 @@ const emit = defineEmits<{ close: []; confirm: [] }>()
     <p class="mt-3 rounded-[12px] border border-danger-border bg-danger-soft px-3 py-2.5 text-[13.5px] font-semibold leading-snug text-danger">
       <template v-if="past">
         Tem certeza que deseja apagar?<br />
-        Ele some da agenda de vez. Essa ação não tem volta.
+        Ele some da agenda de vez.<br />
+        Essa ação não tem volta.
       </template>
       <template v-else>
         Tem certeza que deseja desmarcar?<br />
-        O aviso no WhatsApp também é cancelado. Essa ação não tem volta.
+        O aviso no WhatsApp também é cancelado.<br />
+        Essa ação não tem volta.
       </template>
     </p>
     <div class="mt-[18px] flex gap-2.5">
