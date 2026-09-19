@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { LogOut, Sparkles } from '@lucide/vue'
+import { LogOut, Phone, Sparkles } from '@lucide/vue'
 import { useAuthStore } from '@/stores/auth'
 import { SUBSCRIBE_URL } from '@/lib/config'
 import Brand from '@/components/Brand.vue'
@@ -20,7 +20,7 @@ const FAREWELL = 'Te vejo em breve! 😊'
     <div class="mx-auto flex w-full max-w-[380px] flex-1 flex-col">
       <div class="mb-5 flex flex-col items-center">
         <div class="mb-3 flex h-[64px] w-[64px] items-center justify-center rounded-[20px] bg-primary-soft">
-          <span class="text-[32px] leading-none">🗓️</span>
+          <Phone :size="32" :stroke-width="1.5" fill="currentColor" class="text-primary" />
         </div>
         <h1 class="text-[24px] font-extrabold text-ink"><Brand tone="dark" /></h1>
       </div>

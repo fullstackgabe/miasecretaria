@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Phone } from '@lucide/vue'
 import { useAuthStore } from '@/stores/auth'
 import { isDemo } from '@/lib/config'
 import Spinner from '@/components/Spinner.vue'
@@ -12,7 +13,7 @@ const auth = useAuthStore()
   <div class="flex flex-1 flex-col justify-center overflow-y-auto bg-white p-6">
     <div class="mb-7 flex flex-col items-center">
       <div class="mb-3.5 flex h-[72px] w-[72px] items-center justify-center rounded-[22px] bg-primary-soft">
-        <span class="text-4xl leading-none">🗓️</span>
+        <Phone :size="36" :stroke-width="1.5" fill="currentColor" class="text-primary" />
       </div>
       <h1 class="text-[28px] font-extrabold text-ink"><Brand tone="dark" /></h1>
       <p class="mt-1.5 text-center text-[15px] text-muted">Sua secretária virtual inteligente</p>
@@ -30,7 +31,7 @@ const auth = useAuthStore()
       v-else
       type="button"
       :disabled="auth.busy"
-      class="flex items-center justify-center gap-2.5 rounded-[14px] bg-primary py-[15px] text-[15px] font-bold text-white shadow-[0_4px_8px_rgba(15,118,110,0.25)]"
+      class="flex items-center justify-center gap-2.5 rounded-[14px] bg-primary py-[15px] text-[15px] font-bold text-white shadow-[0_4px_8px_rgba(29,78,216,0.25)]"
       :class="auth.busy ? 'opacity-70' : ''"
       @click="auth.signInGoogle()"
     >
