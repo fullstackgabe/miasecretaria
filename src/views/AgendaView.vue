@@ -114,10 +114,7 @@ async function retry(id: string) {
           @retry="retry"
         />
       </div>
-      <p v-else class="px-2 py-8 text-center text-[14px] leading-relaxed text-muted">
-        Nada marcado nesse dia.<br />
-        Me conta no chat que eu marco. 💬
-      </p>
+      <p v-else class="px-2 py-8 text-center text-[14px] text-muted">Nenhum evento para esse dia.</p>
 
       <EditSheet v-if="editRow" :row="editRow" :tz="tz" :busy="busy" @close="editRow = null" @save="save" />
       <DeleteSheet v-if="deleteRow" :row="deleteRow" :tz="tz" :busy="busy" :past="isPast(deleteRow)" @close="deleteRow = null" @confirm="confirmDelete" />
