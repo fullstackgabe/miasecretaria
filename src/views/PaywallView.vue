@@ -7,7 +7,7 @@ import Brand from '@/components/Brand.vue'
 const auth = useAuthStore()
 
 const PRESENTATION =
-  'Oi, eu sou a secretarIA 👋\n\n' +
+  'Olá, eu sou a Mia 👋\n\n' +
   'Ainda não sou a sua secretária... mas adoraria ser! 😄\n\n' +
   'Marco seus compromissos por texto ou áudio e te lembro no WhatsApp na hora certa.\n\n' +
   'Pra me ter de vez, é só falar com a gente e ativar o seu acesso. É baratinho e super vale a pena! 👇'
@@ -34,7 +34,7 @@ const FAREWELL = 'Te vejo em breve! 😊'
           class="mt-4 flex items-center justify-center gap-2 rounded-xl bg-primary py-3 text-[15px] font-extrabold text-white"
         >
           <Sparkles :size="17" />
-          Quero a secretarIA
+          Quero a Mia
         </a>
         <p class="mt-4 text-[15px] leading-[22px] text-ink">{{ FAREWELL }}</p>
       </div>

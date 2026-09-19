@@ -3,7 +3,7 @@ import { sendWhatsApp } from '../_shared/callmebot.ts'
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!
 const SUPABASE_ANON_KEY = Deno.env.get('SUPABASE_ANON_KEY')!
-const TEXT = '✅ *secretarIA conectada!*\n\nA partir de agora eu te aviso por aqui dos seus compromissos. 😉'
+const TEXT = '✅ *Mia conectada!*\n\nA partir de agora eu te aviso por aqui dos seus compromissos. 😉'
 
 const cors = {
   'Access-Control-Allow-Origin': '*',

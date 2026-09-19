@@ -46,7 +46,7 @@ function buildMessage(a: { title: string; starts_at: string; location: string | 
   const d = new Date(a.starts_at)
   const hm = part(d, tz, { hour: '2-digit', minute: '2-digit', hourCycle: 'h23' })
   return [
-    '🔔 *Lembrete da secretarIA*',
+    '🔔 *Lembrete da Mia*',
     '',
     `*${a.title}*`,
     `📅 ${dayLabel(d, tz)} às ${hm}`,

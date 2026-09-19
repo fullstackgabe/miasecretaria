@@ -12,8 +12,8 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'apple-touch-icon.png'],
       manifest: {
-        name: 'secretarIA',
-        short_name: 'secretarIA',
+        name: 'Mia',
+        short_name: 'Mia',
         description: '',
         lang: 'pt-BR',
         start_url: '/chat',

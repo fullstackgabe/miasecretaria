@@ -16,7 +16,7 @@ watch(recorder.recording, (v) => {
   chat.recording = v
 })
 
-const placeholder = computed(() => (chat.recording ? 'Gravando… toque em parar' : 'Fale com a secretarIA…'))
+const placeholder = computed(() => (chat.recording ? 'Gravando… toque em parar' : 'Fale com a Mia…'))
 const canSend = computed(() => !!chat.draft.trim() && !chat.busy && !chat.recording)
 
 function resize() {
