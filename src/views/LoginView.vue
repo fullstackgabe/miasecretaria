@@ -15,7 +15,7 @@ const auth = useAuthStore()
         <span class="text-4xl leading-none">🗓️</span>
       </div>
       <h1 class="text-[28px] font-extrabold text-ink"><Brand tone="dark" /></h1>
-      <p class="mt-1.5 text-center text-[15px] text-muted">Sua secretária inteligente</p>
+      <p class="mt-1.5 text-center text-[15px] text-muted">Sua secretária virtual inteligente</p>
     </div>
 
     <button
