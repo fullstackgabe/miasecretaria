@@ -90,7 +90,7 @@ async function onTimezone(e: Event) {
       <select class="field" :value="profile.profile?.timezone" @change="onTimezone">
         <option v-for="tz in tzOptions" :key="tz" :value="tz">{{ tz }}</option>
       </select>
-      <p class="mt-2 text-[12.5px] text-muted">Usado pra entender "amanhã às 15h" e pra hora dos avisos.</p>
+      <p class="mt-2 text-[12.5px] text-muted">Tudo que você marcar segue esse horário.</p>
     </section>
 
     <button

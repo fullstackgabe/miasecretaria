@@ -24,13 +24,13 @@ function confirm() {
 <template>
   <div class="mb-[7px] flex flex-col" :class="isUser ? 'items-end' : 'items-start'">
     <div
-      class="rounded-2xl px-3 shadow-[0_1px_3px_rgba(15,23,42,0.06)]"
+      class="relative rounded-2xl px-3 shadow-[0_1px_3px_rgba(15,23,42,0.06)]"
       :class="[
         hasCard ? 'max-w-[90%] py-3' : 'max-w-[82%] py-[7px]',
         isUser ? 'rounded-br-[4px] bg-primary text-white' : 'rounded-bl-[4px] border border-line bg-white text-ink',
       ]"
     >
-      <VoiceWave v-if="msg.voiceDuration != null" :is-user="isUser" :seconds="msg.voiceDuration" />
+      <VoiceWave v-if="msg.voiceDuration != null" :is-user="isUser" :seconds="msg.voiceDuration" :time="time" />
 
       <AppointmentCard
         v-if="pending"
@@ -40,13 +40,11 @@ function confirm() {
       />
       <AppointmentCard v-else-if="registered" :appointment="registered.appointment" :reminder="registered.reminder" :tz="tz" />
 
-      <p v-else-if="showText" class="whitespace-pre-line text-[15px] leading-[21px]" :class="isUser ? 'text-white' : 'text-ink'">
-        {{ msg.content }}
-      </p>
+      <p v-else-if="showText" class="whitespace-pre-line text-[15px] leading-[21px]" :class="isUser ? 'text-white' : 'text-ink'">{{ msg.content }}<span class="inline-block" :class="isUser ? 'w-[52px]' : 'w-[36px]'"></span></p>
 
-      <div v-if="time && !hasCard" class="mt-0.5 flex items-center justify-end gap-[3px]">
+      <div v-if="time && showText" class="absolute bottom-[5px] right-[10px] flex items-center gap-[3px]">
         <span class="text-[10.5px]" :class="isUser ? 'text-white/70' : 'text-faint'">{{ time }}</span>
-        <CheckCheck v-if="isUser" :size="13" class="text-white/85" />
+        <CheckCheck v-if="isUser" :size="13" class="text-[#53bdeb]" />
       </div>
     </div>
 
