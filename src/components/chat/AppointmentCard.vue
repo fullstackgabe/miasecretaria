@@ -72,9 +72,6 @@ const remindText = computed(() => {
     >
       ⚠️ Você já tem <b>{{ conflict.title }}</b> às {{ conflict.time }} nesse dia.
     </p>
-    <p v-if="pending" class="mt-3 text-xs text-faint">
-      Algo errado? Me diz que eu mudo. 🙂<br />
-      O aviso antecipado você pode ajustar na Agenda.
-    </p>
+    <p v-if="pending" class="mt-3 text-xs text-faint">Algo errado? Me diz que eu mudo. 🙂</p>
   </div>
 </template>
