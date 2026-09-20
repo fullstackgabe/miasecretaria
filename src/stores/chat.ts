@@ -15,12 +15,12 @@ export const WELCOME: ChatItem = {
 }
 
 export const SUGGESTIONS = [
-  'dentista amanhã às 15h, me avisa 1h antes',
+  'dentista amanhã às 15h',
   'reunião sexta 10h, avisa 30 min antes',
   'aniversário da Ana dia 20 às 19h, avisa no dia às 9h',
-  'academia hoje 18h, me lembra na hora',
+  'academia hoje 18h, me lembra 1h antes',
   'consulta dia 15/10 às 8h30, avisa 1 dia antes',
-  'o que eu tenho amanhã?',
+  'almoço com a Júlia sábado 12h, avisa na hora',
 ]
 
 const SUCCESS_LINES = [
