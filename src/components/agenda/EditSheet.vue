@@ -2,15 +2,15 @@
 import { computed, ref } from 'vue'
 import type { AppointmentRow } from '@/types'
 import { utcToZoned, zonedToUtc } from '@/lib/dates'
-import { latestReminder, type AppointmentPatch } from '@/lib/repo'
+import { beforeReminder, type AppointmentPatch } from '@/lib/repo'
 import ModalSheet from '@/components/ModalSheet.vue'
 import Spinner from '@/components/Spinner.vue'
-import ReminderChips, { type ReminderChoice } from './ReminderChips.vue'
 
 const props = defineProps<{ row: AppointmentRow; tz: string; busy: boolean }>()
 const emit = defineEmits<{ close: []; save: [patch: AppointmentPatch] }>()
 
-const PRESETS = [0, 15, 30, 60, 120, 1440]
+type Unit = 'min' | 'h' | 'd'
+const UNIT_MINUTES: Record<Unit, number> = { min: 1, h: 60, d: 1440 }
 
 const start = utcToZoned(props.row.starts_at, props.tz)
 const title = ref(props.row.title)
@@ -19,12 +19,11 @@ const time = ref(start.time)
 const location = ref(props.row.location ?? '')
 const error = ref<string | null>(null)
 
-const reminder = latestReminder(props.row)
-const initialDiff = reminder ? Math.round((new Date(props.row.starts_at).getTime() - new Date(reminder.remind_at).getTime()) / 60000) : 60
-const initialCustom = reminder ? utcToZoned(reminder.remind_at, props.tz) : start
-const choice = ref<ReminderChoice>(PRESETS.includes(initialDiff) ? initialDiff : 'custom')
-const customDate = ref(initialCustom.date)
-const customTime = ref(initialCustom.time)
+const reminder = beforeReminder(props.row)
+const initialDiff = reminder ? Math.max(1, Math.round((new Date(props.row.starts_at).getTime() - new Date(reminder.remind_at).getTime()) / 60000)) : 10
+const initialUnit: Unit = initialDiff % 1440 === 0 ? 'd' : initialDiff % 60 === 0 ? 'h' : 'min'
+const amount = ref(initialDiff / UNIT_MINUTES[initialUnit])
+const unit = ref<Unit>(initialUnit)
 
 const alreadySent = computed(() => reminder?.status === 'sent')
 
@@ -43,10 +42,12 @@ function save() {
     error.value = 'O compromisso precisa estar no futuro.'
     return
   }
-  const remind =
-    choice.value === 'custom'
-      ? zonedToUtc(customDate.value || date.value, customTime.value || time.value, props.tz)
-      : new Date(starts.getTime() - choice.value * 60000)
+  const minutes = Math.floor(Number(amount.value))
+  if (!Number.isFinite(minutes) || minutes < 1) {
+    error.value = 'Coloque com quanto tempo de antecedência quer o aviso.'
+    return
+  }
+  const remind = new Date(starts.getTime() - minutes * UNIT_MINUTES[unit.value] * 60000)
   emit('save', {
     title: title.value.trim(),
     starts_at: starts.toISOString(),
@@ -73,14 +74,19 @@ function save() {
     </div>
     <label class="label">Local (opcional)</label>
     <input v-model="location" class="field" autocomplete="off" placeholder="Ex.: Clínica Sorriso" />
-    <label class="label">Aviso</label>
-    <ReminderChips v-model="choice" />
-    <div v-if="choice === 'custom'" class="mt-2 flex gap-2">
-      <input v-model="customDate" type="date" class="field flex-1" />
-      <input v-model="customTime" type="time" class="field w-[120px]" />
+    <label class="label">Aviso antecipado</label>
+    <div class="flex items-center gap-2">
+      <input v-model="amount" type="number" min="1" inputmode="numeric" class="field w-[84px] text-center" />
+      <select v-model="unit" class="field flex-1">
+        <option value="min">minutos</option>
+        <option value="h">horas</option>
+        <option value="d">dias</option>
+      </select>
+      <span class="text-sm font-semibold text-ink-2">antes</span>
     </div>
+    <p class="mt-1.5 text-[12px] text-faint">Na hora do compromisso você recebe outro aviso.</p>
     <p v-if="alreadySent" class="mt-3 rounded-[10px] border border-warn-border bg-warn-soft px-2.5 py-2 text-[12.5px] font-semibold leading-snug text-warn-text">
-      O aviso desse compromisso já foi enviado. Mudar o aviso cria um novo.
+      O aviso antecipado desse compromisso já foi enviado. Mudar o aviso cria um novo.
     </p>
     <p v-if="error" class="mt-2 text-[12.5px] font-semibold text-danger">{{ error }}</p>
     <div class="mt-[18px] flex gap-2.5">

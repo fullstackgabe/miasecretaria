@@ -10,7 +10,7 @@ export const SUBSCRIBE_URL = 'https://wa.me/554187998159?text=Oi!%20Quero%20assi
 
 export const DEFAULT_TZ = 'America/Sao_Paulo'
 
-export const DEFAULT_BEFORE_MIN = 60
+export const DEFAULT_BEFORE_MIN = 10
 
 export const TIMEZONES = [
   'America/Sao_Paulo',

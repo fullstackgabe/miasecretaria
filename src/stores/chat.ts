@@ -26,7 +26,7 @@ export const SUGGESTIONS = [
 const SUCCESS_LINES = [
   'Marcado! ✅\nEu te aviso no WhatsApp na hora combinada. 😉',
   'Anotado na agenda! ✅\nPode deixar que eu te lembro no WhatsApp. 📲',
-  'Prontinho, tá na agenda! ✅\nQuando chegar a hora do aviso, te chamo no WhatsApp. 😊',
+  'Prontinho, tá na agenda! ✅\nQuando chegar a hora, te chamo no WhatsApp. 😊',
 ]
 
 const GENERIC_ERROR = 'Ops, algo deu errado. Tenta de novo?'
@@ -119,9 +119,9 @@ export const useChatStore = defineStore('chat', () => {
   async function confirmPending(id: string, parsed: ParsedAppointment) {
     busyId.value = id
     try {
-      const { appointment, reminder } = await addAppointment(parsed, tz())
+      const { appointment, reminder, reminders } = await addAppointment(parsed, tz())
       messages.value = messages.value.filter((x) => x.id !== id)
-      const meta: MessageMeta = { type: 'appointment', appointment, reminder }
+      const meta: MessageMeta = { type: 'appointment', appointment, reminder, reminders }
       await revealBot({ id: uid(), role: 'assistant', content: '', meta })
       saveMessage('assistant', '', meta).catch(() => {})
       const ok = SUCCESS_LINES[Math.floor(Math.random() * SUCCESS_LINES.length)]!

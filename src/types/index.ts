@@ -47,7 +47,7 @@ export type Conflict = { title: string; time: string }
 
 export type MessageMeta =
   | { type: 'pending'; appointment: ParsedAppointment; conflict: Conflict | null }
-  | { type: 'appointment'; appointment: Appointment; reminder: Reminder }
+  | { type: 'appointment'; appointment: Appointment; reminder: Reminder; reminders?: Reminder[] }
   | { type: 'voice'; duration: number }
   | null
 

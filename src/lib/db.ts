@@ -131,6 +131,12 @@ export async function reminderUpdate(id: string, patch: Partial<Reminder> & { ne
   if (error) throw error
 }
 
+export async function reminderDelete(id: string): Promise<void> {
+  if (isDemo) return demoStore.reminderDelete(id)
+  const { error } = await supabase.from('reminders').delete().eq('id', id)
+  if (error) throw error
+}
+
 export async function chatList(limit = 50): Promise<ChatMessage[]> {
   if (isDemo) return demoStore.chatList()
   const { data } = await supabase.from('chat_messages').select('*').order('created_at', { ascending: false }).limit(limit)

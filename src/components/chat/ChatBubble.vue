@@ -38,7 +38,13 @@ function confirm() {
         :conflict="pending.conflict"
         :tz="tz"
       />
-      <AppointmentCard v-else-if="registered" :appointment="registered.appointment" :reminder="registered.reminder" :tz="tz" />
+      <AppointmentCard
+        v-else-if="registered"
+        :appointment="registered.appointment"
+        :reminder="registered.reminder"
+        :reminders="registered.reminders"
+        :tz="tz"
+      />
 
       <p v-else-if="showText" class="whitespace-pre-line text-[15px] leading-[21px]" :class="isUser ? 'text-white' : 'text-ink'">{{ msg.content }}<span class="inline-block" :class="isUser ? 'w-[52px]' : 'w-[36px]'"></span></p>
 

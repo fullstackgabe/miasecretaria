@@ -2,14 +2,14 @@
 import { computed } from 'vue'
 import { Calendar, Clock, MapPin, Bell } from '@lucide/vue'
 import type { Appointment, Conflict, ParsedAppointment, Reminder } from '@/types'
-import { fullDateLabel, remindLabel, shortDateTime, timeHM, utcToZoned } from '@/lib/dates'
-import { resolveTimes } from '@/lib/repo'
+import { fullDateLabel, minutesLabel, remindLabel, shortDateTime, timeHM, utcToZoned } from '@/lib/dates'
 
 const props = defineProps<{
   pending?: ParsedAppointment | null
   conflict?: Conflict | null
   appointment?: Appointment | null
   reminder?: Reminder | null
+  reminders?: Reminder[] | null
   tz: string
 }>()
 
@@ -31,15 +31,18 @@ const time = computed(() => {
 const remindText = computed(() => {
   if (props.pending) {
     const label = remindLabel(props.pending.remind)
-    try {
-      const { remind_at } = resolveTimes(props.pending, props.tz)
-      return `Aviso: ${label} → ${shortDateTime(remind_at, props.tz)}`
-    } catch {
-      return `Aviso: ${label}`
-    }
+    return label === 'na hora' ? 'Aviso: na hora' : `Aviso: ${label} e na hora`
   }
-  if (props.reminder) return `Aviso: ${shortDateTime(props.reminder.remind_at, props.tz)}`
-  return ''
+  if (!props.appointment) return ''
+  const rs = props.reminders ?? (props.reminder ? [props.reminder] : [])
+  if (!rs.length) return ''
+  const starts = new Date(props.appointment.starts_at).getTime()
+  const before = rs.find((r) => new Date(r.remind_at).getTime() < starts)
+  const at = rs.find((r) => new Date(r.remind_at).getTime() === starts)
+  if (!before) return at ? 'Aviso: na hora' : `Aviso: ${shortDateTime(rs[0]!.remind_at, props.tz)}`
+  const diff = Math.round((starts - new Date(before.remind_at).getTime()) / 60000)
+  const label = diff % 5 === 0 ? `${minutesLabel(diff)} antes` : shortDateTime(before.remind_at, props.tz)
+  return at ? `Aviso: ${label} e na hora` : `Aviso: ${label}`
 })
 </script>
 
@@ -69,6 +72,9 @@ const remindText = computed(() => {
     >
       ⚠️ Você já tem <b>{{ conflict.title }}</b> às {{ conflict.time }} nesse dia.
     </p>
-    <p v-if="pending" class="mt-3 text-xs text-faint">Se algo estiver errado, é só me dizer que eu mudo 🙂</p>
+    <p v-if="pending" class="mt-3 text-xs text-faint">
+      Algo errado? Me diz que eu mudo. 🙂<br />
+      O aviso antecipado você pode ajustar na Agenda.
+    </p>
   </div>
 </template>

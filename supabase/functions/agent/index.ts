@@ -5,7 +5,7 @@ const OPENAI_MODEL = Deno.env.get('OPENAI_MODEL') || 'gpt-4o-mini'
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!
 const SUPABASE_ANON_KEY = Deno.env.get('SUPABASE_ANON_KEY')!
 const DEFAULT_TZ = 'America/Sao_Paulo'
-const DEFAULT_BEFORE = 60
+const DEFAULT_BEFORE = 10
 
 const cors = {
   'Access-Control-Allow-Origin': '*',
@@ -56,7 +56,7 @@ const tools = [
           time: { type: 'string', description: 'Hora do compromisso em HH:MM (24h).' },
           location: { type: 'string', description: 'Local, se o usuário disse. Senão, string vazia.' },
           remind_kind: { type: 'string', enum: ['before', 'at'], description: '"before" = X minutos antes do compromisso; "at" = num dia/hora específicos.' },
-          remind_minutes: { type: 'integer', description: 'Se remind_kind = before: minutos antes (1h = 60, 1 dia = 1440). Se o usuário não disse, 60.' },
+          remind_minutes: { type: 'integer', description: 'Se remind_kind = before: minutos antes (1h = 60, 1 dia = 1440). Se o usuário não disse, 10.' },
           remind_date: { type: 'string', description: 'Se remind_kind = at: data do aviso em YYYY-MM-DD.' },
           remind_time: { type: 'string', description: 'Se remind_kind = at: hora do aviso em HH:MM.' },
         },
@@ -74,14 +74,14 @@ AGORA: ${now.weekday}, ${now.date} ${now.time} (fuso ${tz}). Use isso pra resolv
 PRÓXIMOS COMPROMISSOS DO USUÁRIO (só pra consulta, nunca invente outros):
 ${agenda}
 
-Um compromisso válido precisa de 3 informações OBRIGATÓRIAS: O QUÊ (título), DIA e HORA. O AVISO é opcional (padrão: 60 minutos antes). Para cada mensagem (usando o histórico como contexto), você faz UMA de cinco coisas:
+Um compromisso válido precisa de 3 informações OBRIGATÓRIAS: O QUÊ (título), DIA e HORA. O AVISO ANTECIPADO é opcional (padrão: 10 minutos antes; na hora do compromisso o app sempre avisa de novo). Para cada mensagem (usando o histórico como contexto), você faz UMA de cinco coisas:
 
 (A) MARCAR — se identificar os 3 obrigatórios, CHAME extrair_compromisso:
    - title: o compromisso em si, curto e capitalizado, SEM data/hora/aviso. "dentista amanhã às 15h" → "Dentista"; "reunião com o João sexta 10h" → "Reunião com o João"; "buscar as crianças 17h30" → "Buscar as crianças".
    - date: resolva a partir de AGORA. "hoje" = ${now.date}; "amanhã" = +1 dia; "depois de amanhã" = +2; dia da semana = a PRÓXIMA ocorrência (se for hoje e a hora ainda não passou, é hoje; "que vem"/"próxima" = a próxima ocorrência, nunca hoje); "dia 15" = dia 15 deste mês se ainda não passou, senão do mês que vem; "15/10" = 15 de outubro deste ano (ou do próximo se já passou); "daqui a 3 dias" = +3 dias.
    - time: 24h. "15h" = 15:00; "8h30" = 08:30; "3 da tarde" = 15:00; "9 da noite" = 21:00; "meio-dia" = 12:00; "daqui a 2 horas" = agora + 2h (arredonde pra cima em 5 min e resolva a data também).
    - location: só se o usuário disser ("na clínica X", "no escritório", "em casa"); senão vazio.
-   - aviso: "1h antes"/"30 min antes"/"1 dia antes"/"2 dias antes" → remind_kind "before" e remind_minutes 60/30/1440/2880. "na hora"/"no momento" → before 0. "no dia às 8h" → remind_kind "at" com remind_date = date do compromisso e remind_time 08:00. "na véspera às 20h" → at com o dia anterior e 20:00. Se NÃO disse nada sobre o aviso → before 60 (NÃO pergunte).
+   - aviso: "1h antes"/"30 min antes"/"1 dia antes"/"2 dias antes" → remind_kind "before" e remind_minutes 60/30/1440/2880. "na hora"/"no momento" → before 0. "no dia às 8h" → remind_kind "at" com remind_date = date do compromisso e remind_time 08:00. "na véspera às 20h" → at com o dia anterior e 20:00. Se NÃO disse nada sobre o aviso → before 10 (NÃO pergunte).
    - Se o horário do compromisso já PASSOU (antes de AGORA), NÃO chame a função: responda exatamente "${PAST_LINE}".
    A ORDEM é livre. Ex.: "às 10h de sexta, reunião, avisa 15 min antes" = Reunião / próxima sexta / 10:00 / before 15.
    Se a pessoa está CORRIGINDO um compromisso que ainda está em confirmação ("não, é às 16h", "muda pra quinta"), chame a função de novo com os dados corrigidos, mantendo o resto do histórico.

@@ -97,6 +97,9 @@ export const demoStore = {
   async reminderUpdate(id: string, patch: Partial<Reminder>): Promise<void> {
     write(K_REMINDERS, rems().map((r) => (r.id === id ? { ...r, ...patch } : r)))
   },
+  async reminderDelete(id: string): Promise<void> {
+    write(K_REMINDERS, rems().filter((r) => r.id !== id))
+  },
   async remindersDue(): Promise<Reminder[]> {
     const now = nowIso()
     return rems().filter((r) => r.status === 'pending' && r.remind_at <= now)

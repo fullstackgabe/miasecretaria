@@ -3,13 +3,13 @@ import { computed } from 'vue'
 import { MapPin, Pencil, Trash2 } from '@lucide/vue'
 import type { AppointmentRow } from '@/types'
 import { timeHM } from '@/lib/dates'
-import { latestReminder } from '@/lib/repo'
+import { reminderSummary } from '@/lib/repo'
 import ReminderBadge from './ReminderBadge.vue'
 
 const props = defineProps<{ row: AppointmentRow; tz: string; past?: boolean }>()
 const emit = defineEmits<{ edit: [row: AppointmentRow]; remove: [row: AppointmentRow]; retry: [id: string] }>()
 
-const reminder = computed(() => latestReminder(props.row))
+const reminder = computed(() => reminderSummary(props.row))
 </script>
 
 <template>
