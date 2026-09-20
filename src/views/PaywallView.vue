@@ -7,10 +7,12 @@ import Brand from '@/components/Brand.vue'
 const auth = useAuthStore()
 
 const PRESENTATION =
-  'Olá, eu sou a Mia 👋\n\n' +
+  'Olá, eu sou a Mia 👋\n' +
   'Ainda não sou a sua secretária virtual... mas adoraria ser! 😄\n\n' +
-  'Te aviso no WhatsApp na hora certinho: é só me informar o nome do evento, quando e que horas.\n\n' +
-  'Pra me ter de vez, é só ativar o seu acesso. É baratinho e super vale a pena! 👇'
+  'Eu anoto seus compromissos, organizo sua agenda\n' +
+  'e te aviso no WhatsApp na hora que você escolher.\n\n' +
+  'Pra me ter de vez, é só ativar o seu acesso.\n' +
+  'É baratinho e vale muito a pena! 👇'
 
 const FAREWELL = 'Te vejo em breve! 😊'
 </script>

@@ -22,7 +22,7 @@ async function sendTest() {
   testing.value = true
   try {
     const r = await profile.sendTest()
-    if (r.ok) toast(isDemo ? '📲 (simulado) Mensagem de teste enviada!' : 'Mensagem de teste enviada! Olha o WhatsApp. 📲')
+    if (r.ok) toast('Mensagem de teste enviada!')
     else if (r.status === 203) toast('A API key parece inválida. Toque em Reconectar.')
     else toast('Não consegui falar com o CallMeBot agora.')
   } catch {

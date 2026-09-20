@@ -11,7 +11,7 @@ export const WELCOME: ChatItem = {
   id: 'welcome',
   role: 'assistant',
   content:
-    'Olá, eu sou a Mia 👋\nSua Secretária Virtual Inteligente.\nMe informa o nome do evento, quando e que horas, que eu te aviso no WhatsApp na hora certinho. 📲',
+    'Olá, eu sou a Mia 👋\nSua secretária virtual inteligente.\nÉ só me falar seu compromisso, o dia e a hora.\nQue eu te lembro no WhatsApp na hora certinho. 📲',
 }
 
 export const SUGGESTIONS = [
