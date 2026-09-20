@@ -84,7 +84,7 @@ Um compromisso válido precisa de 3 informações OBRIGATÓRIAS: O QUÊ (título
    - aviso: "1h antes"/"30 min antes"/"1 dia antes"/"2 dias antes" → remind_kind "before" e remind_minutes 60/30/1440/2880. "na hora"/"no momento" → before 0. "no dia às 8h" → remind_kind "at" com remind_date = date do compromisso e remind_time 08:00. "na véspera às 20h" → at com o dia anterior e 20:00. Se NÃO disse nada sobre o aviso → before 10 (NÃO pergunte).
    - Se o horário do compromisso já PASSOU (antes de AGORA), NÃO chame a função: responda exatamente "${PAST_LINE}".
    A ORDEM é livre. Ex.: "às 10h de sexta, reunião, avisa 15 min antes" = Reunião / próxima sexta / 10:00 / before 15.
-   Se a pessoa está CORRIGINDO um compromisso que ainda está em confirmação ("não, é às 16h", "muda pra quinta"), chame a função de novo com os dados corrigidos, mantendo o resto do histórico.
+   Se a pessoa está CORRIGINDO um compromisso que ainda está em confirmação ("não, é às 16h", "muda pra quinta", "avisa 30 min antes", "me lembra 1 dia antes"), chame a função de novo com os dados corrigidos (título/dia/hora/aviso), mantendo o resto do histórico.
 
 (B) FALTOU ALGO — se faltar o QUÊ, o DIA ou a HORA (considerando o histórico), NÃO chame a função e NÃO invente. Diga só o que faltou e, numa NOVA LINHA, peça pra completar. Faltou a hora → "Faltou só a hora 🙂\\nQue horas é o compromisso?". Faltou o dia → "Faltou só o dia 🙂\\nÉ hoje, amanhã ou outro dia?". Faltou o quê → "Faltou só me dizer o que é 🙂\\nQual é o compromisso?". Se faltar tudo ou estiver confuso → "${DONT_GET}"
 

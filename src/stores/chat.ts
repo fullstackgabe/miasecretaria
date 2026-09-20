@@ -100,6 +100,7 @@ export const useChatStore = defineStore('chat', () => {
     saveMessage('user', userText, userMeta).catch(() => {})
     try {
       const { reply, meta } = await askMia(payload)
+      if (meta?.type === 'pending') messages.value = messages.value.filter((x) => x.meta?.type !== 'pending')
       await revealBot({ id: uid(), role: 'assistant', content: reply, meta })
       if (meta?.type !== 'pending') saveMessage('assistant', reply, meta).catch(() => {})
     } catch {
