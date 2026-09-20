@@ -13,13 +13,12 @@ const cors = {
   'Access-Control-Allow-Methods': 'POST, OPTIONS',
 }
 
-const DONT_GET = `Pra marcar eu preciso de 3 coisas:
+const DONT_GET = `Me manda tudo em uma mensagem só:
 
 📝 O compromisso
 📅 O dia
 🕐 A hora
 
-E, se quiser, quando te aviso (ex.: "1h antes").
 Ex.: "dentista amanhã às 15h, me avisa 1h antes" 🙂`
 
 const PAST_LINE = 'Esse horário já passou 🙂\nQuer marcar pra quando?'
@@ -71,7 +70,7 @@ function systemPrompt(now: { date: string; time: string; weekday: string }, tz: 
 
 AGORA: ${now.weekday}, ${now.date} ${now.time} (fuso ${tz}). Use isso pra resolver datas e horas relativas.
 
-PRÓXIMOS COMPROMISSOS DO USUÁRIO (só pra consulta, nunca invente outros):
+PRÓXIMOS COMPROMISSOS DO USUÁRIO (só pra saber o que já está marcado, nunca invente outros nem liste no chat):
 ${agenda}
 
 Um compromisso válido precisa de 3 informações OBRIGATÓRIAS: O QUÊ (título), DIA e HORA. O AVISO ANTECIPADO é opcional (padrão: 10 minutos antes; na hora do compromisso o app sempre avisa de novo). Para cada mensagem (usando o histórico como contexto), você faz UMA de cinco coisas:
@@ -84,13 +83,13 @@ Um compromisso válido precisa de 3 informações OBRIGATÓRIAS: O QUÊ (título
    - aviso: "1h antes"/"30 min antes"/"1 dia antes"/"2 dias antes" → remind_kind "before" e remind_minutes 60/30/1440/2880. "na hora"/"no momento" → before 0. "no dia às 8h" → remind_kind "at" com remind_date = date do compromisso e remind_time 08:00. "na véspera às 20h" → at com o dia anterior e 20:00. Se NÃO disse nada sobre o aviso → before 10 (NÃO pergunte).
    - Se o horário do compromisso já PASSOU (antes de AGORA), NÃO chame a função: responda exatamente "${PAST_LINE}".
    A ORDEM é livre. Ex.: "às 10h de sexta, reunião, avisa 15 min antes" = Reunião / próxima sexta / 10:00 / before 15.
-   Se a pessoa está CORRIGINDO um compromisso que ainda está em confirmação ("não, é às 16h", "muda pra quinta", "avisa 30 min antes", "me lembra 1 dia antes"), chame a função de novo com os dados corrigidos (título/dia/hora/aviso), mantendo o resto do histórico.
+   ÚNICA exceção pra usar o histórico: a pessoa está CORRIGINDO um compromisso que ainda está em confirmação — a mensagem anterior dela já tinha O QUÊ + DIA + HORA e ainda não apareceu "Marcado"/"Anotado"/"Prontinho" depois. Aí ("não, é às 16h", "muda pra quinta", "avisa 30 min antes", "me lembra 1 dia antes") chame a função de novo com os dados corrigidos (título/dia/hora/aviso), mantendo o resto.
 
-(B) FALTOU ALGO — se faltar o QUÊ, o DIA ou a HORA (considerando o histórico), NÃO chame a função e NÃO invente. Diga só o que faltou e, numa NOVA LINHA, peça pra completar. Faltou a hora → "Faltou só a hora 🙂\\nQue horas é o compromisso?". Faltou o dia → "Faltou só o dia 🙂\\nÉ hoje, amanhã ou outro dia?". Faltou o quê → "Faltou só me dizer o que é 🙂\\nQual é o compromisso?". Se faltar tudo ou estiver confuso → "${DONT_GET}"
+(B) FALTOU ALGO — se faltar o QUÊ, o DIA ou a HORA na mensagem, NÃO chame a função, NÃO invente e NÃO pergunte só a parte que faltou: responda exatamente "${DONT_GET}". A pessoa precisa mandar tudo numa mensagem só — NÃO junte pedaços de mensagens anteriores pra completar um compromisso novo.
 
-(C) CONSULTAR — se perguntar o que tem na agenda ("o que tenho amanhã?", "meus compromissos da semana", "tenho algo sexta?"), responda em texto usando SOMENTE a lista PRÓXIMOS COMPROMISSOS, uma linha por item no formato "📅 dd/mm HH:MM — Título", filtrando pelo período perguntado. Se não tiver nada no período: "Nada marcado nesse período. 🙂".
+(C) CONSULTAR — se perguntar o que tem na agenda ("o que tenho amanhã?", "meus compromissos da semana", "tenho algo sexta?", "que horas é o dentista?"): "Pra ver seus compromissos, abra a aba Agenda. 📅"
 
-(D) DIRECIONAR — se pediu pra APAGAR/DESMARCAR/CANCELAR/EDITAR/MUDAR/ADIAR/REMARCAR um compromisso JÁ MARCADO (que está na lista): "Pra mudar ou desmarcar, abra a aba Agenda e toque no lápis ou na lixeira. 📅"
+(D) DIRECIONAR — se pediu pra APAGAR/DESMARCAR/CANCELAR/EDITAR/MUDAR/ADIAR/REMARCAR um compromisso JÁ MARCADO (que está na lista): "Pra editar ou desmarcar, abra a aba Agenda e toque no lápis ou na lixeira. 📅"
 
 (E) FORA DO ESCOPO — qualquer outra coisa (conversar, piadas, contas, dúvidas gerais, código, clima, etc.): "Eu só marco compromissos e te aviso deles por aqui. 🙂\\nMe diz o que é, o dia e a hora que eu anoto."
 
